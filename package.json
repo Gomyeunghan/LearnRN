@@ -1,7 +1,7 @@
 {
   "name": "rnlearn",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.tsx",
   "dependencies": {
     "expo": "~57.0.21",
     "expo-status-bar": "~57.0.1",
@@ -14,5 +14,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@react-native/typescript-config": "^0.87.1",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-test-renderer": "^19.1.0",
+    "typescript": "^7.0.2"
+  }
 }
