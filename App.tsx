@@ -1,40 +1,41 @@
 import { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { StyleSheet, View, Button, TextInput, FlatList } from "react-native";
+import TodoItems from "./components/TodoItems";
+import TodoInput from "./components/TodoInput";
 
 export default function App() {
-  const [todo, setTodo] = useState<string | undefined>("");
-  const [todolist, setTodolist] = useState<String[]>([]);
+  const [todolist, setTodolist] = useState<{ todo: string; id: string }[]>([]);
+  const [modalIsVisible, setModalIsVIsible] = useState<boolean>(false);
 
-  function todoInputHandler(enterText: string) {
-    setTodo(enterText);
+  function addTodoList({ todo }: { todo: string }) {
+    if (!todo) return;
+    setTodolist((prev: { todo: string; id: string }[]) => [
+      ...prev,
+      { todo: todo, id: Math.random().toString() },
+    ]);
   }
 
-  function addTodoList() {
-    if (!todo) return;
-    setTodolist((prev) => [...prev, todo]);
-    setTodo("");
+  function onDelelteItem(id: string) {
+    setTodolist(() => todolist.filter((item) => item.id !== id));
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.todoInputContainer}>
-        <TextInput
-          placeholder="여기에 할일을 입력해주세요"
-          onChangeText={todoInputHandler}
-          value={todo}
-          style={{ flex: 1 }}
-        />
-        <Button title="추가하기" onPress={addTodoList} />
-      </View>
-
+      <Button
+        title="할일 추가하기"
+        color={"blue"}
+        onPress={() => setModalIsVIsible(true)}
+      />
+      <TodoInput addTodoList={addTodoList} visible={modalIsVisible} />
       <View style={styles.listContainer}>
-        {todolist.map((todo, i) => (
-          <View style={styles.list}>
-            <Text key={i} style={styles.listText}>
-              {todo}
-            </Text>
-          </View>
-        ))}
+        <FlatList
+          renderItem={({ item }) => {
+            return <TodoItems Todoitem={item} onDelelteItem={onDelelteItem} />;
+          }}
+          data={todolist}
+          contentContainerStyle={styles.listContent}
+          keyExtractor={(item) => item.id}
+        />
       </View>
     </View>
   );
@@ -42,6 +43,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10,
     marginTop: 50,
     display: "flex",
@@ -51,25 +53,10 @@ const styles = StyleSheet.create({
 
   listContainer: {
     display: "flex",
-    gap: 10,
+    flexDirection: "column",
   },
 
-  todoInputContainer: {
-    display: "flex",
-    flexDirection: "row",
-    flex: 1,
-    marginBottom: 20,
-  },
-  list: {
-    borderWidth: 1,
-    borderColor: "#427D9D",
-    backgroundColor: "#427D9D",
-    padding: 6,
-    borderRadius: 5,
-  },
-
-  listText: {
-    fontSize: 18,
-    color: "white",
+  listContent: {
+    gap: 20,
   },
 });
