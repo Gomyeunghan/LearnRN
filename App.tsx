@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View, Button, TextInput, FlatList } from "react-native";
+import { StyleSheet, View, Pressable, Text, FlatList } from "react-native";
 import TodoItems from "./components/TodoItems";
 import TodoInput from "./components/TodoInput";
 
@@ -19,14 +19,26 @@ export default function App() {
     setTodolist(() => todolist.filter((item) => item.id !== id));
   }
 
+  function cancelModalHandler() {
+    setModalIsVIsible(false);
+  }
+
   return (
     <View style={styles.container}>
-      <Button
-        title="할일 추가하기"
-        color={"blue"}
+      <Pressable
         onPress={() => setModalIsVIsible(true)}
+        style={({ pressed }) => [
+          styles.addButton,
+          pressed && styles.addButtonPressed,
+        ]}
+      >
+        <Text style={styles.addButtonText}>+ 할일 추가하기</Text>
+      </Pressable>
+      <TodoInput
+        addTodoList={addTodoList}
+        visible={modalIsVisible}
+        cancelModalHandler={cancelModalHandler}
       />
-      <TodoInput addTodoList={addTodoList} visible={modalIsVisible} />
       <View style={styles.listContainer}>
         <FlatList
           renderItem={({ item }) => {
@@ -44,19 +56,44 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    marginTop: 50,
+    padding: 16,
+    paddingTop: 60,
+    backgroundColor: "#EAF2FF",
     display: "flex",
     flexDirection: "column",
-    gap: 10,
+    gap: 14,
+  },
+
+  addButton: {
+    backgroundColor: "#2F6FED",
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: "center",
+    shadowColor: "#2F6FED",
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
+  },
+
+  addButtonPressed: {
+    backgroundColor: "#245ACB",
+  },
+
+  addButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
   },
 
   listContainer: {
+    flex: 1,
     display: "flex",
     flexDirection: "column",
   },
 
   listContent: {
-    gap: 20,
+    gap: 12,
+    paddingBottom: 20,
   },
 });

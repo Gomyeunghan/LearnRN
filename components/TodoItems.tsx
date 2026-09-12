@@ -25,18 +25,21 @@ export default function TodoItems({
 
 const styles = StyleSheet.create({
   list: {
-    borderWidth: 1,
-    borderColor: "#427D9D",
-    backgroundColor: "#427D9D",
-
-    borderRadius: 5,
+    backgroundColor: "#2F6FED",
+    borderRadius: 14,
+    shadowColor: "#0B2D6B",
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
   },
   listText: {
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: "600",
     color: "white",
-    padding: 8,
+    padding: 14,
   },
   pressed: {
-    opacity: 0.5,
+    opacity: 0.6,
   },
 });
