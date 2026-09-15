@@ -1,7 +1,33 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { Alert, StyleSheet, TextInput, View } from "react-native";
 import Button from "../components/Button";
+import { useState } from "react";
 
-export default function StartGameScreen() {
+export default function StartGameScreen({
+  onPickNumber,
+}: {
+  onPickNumber: ({ pickNumber }: { pickNumber: number }) => void;
+}) {
+  const [enterdNumber, setEnteredNumber] = useState<string>("");
+
+  function handleChangeInput(entered: string) {
+    setEnteredNumber(entered);
+  }
+
+  function handleResetButton() {
+    setEnteredNumber("");
+  }
+
+  function handlePreeButton() {
+    const pickNumber = parseInt(enterdNumber);
+
+    if (isNaN(pickNumber) || pickNumber > 99 || pickNumber < 0) {
+      Alert.alert("허용되지 않은 숫자 입니다.", "1~99 의 숫자가 아닙니다.", [
+        { text: "확인", style: "destructive", onPress: handleResetButton },
+      ]);
+    }
+    onPickNumber({ pickNumber });
+  }
+
   return (
     <View style={styles.confirmContainer}>
       <TextInput
@@ -10,13 +36,15 @@ export default function StartGameScreen() {
         keyboardType="number-pad"
         autoCapitalize="none"
         autoCorrect={false}
+        value={enterdNumber}
+        onChangeText={handleChangeInput}
       />
       <View style={styles.buttonWrapper}>
         <View style={{ flex: 1 }}>
-          <Button>Reset</Button>
+          <Button onPress={handleResetButton}>Reset</Button>
         </View>
         <View style={{ flex: 1 }}>
-          <Button>Confirm</Button>
+          <Button onPress={handlePreeButton}>Confirm</Button>
         </View>
       </View>
     </View>
